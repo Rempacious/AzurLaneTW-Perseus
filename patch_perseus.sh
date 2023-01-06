@@ -26,16 +26,16 @@ chmod +x apkeep
 
 # Download Azur Lane
 download_azurlane () {
-    if [ ! -f "com.YoStarEN.AzurLane.xapk" ]; then
-    ./apkeep -a com.YoStarEN.AzurLane .
+    if [ ! -f "com.hkmanjuu.azurlane.gp.xapk" ]; then
+    ./apkeep -a com.hkmanjuu.azurlane.gp .
     fi
 }
 
-if [ ! -f "com.YoStarEN.AzurLane.apk" ]; then
+if [ ! -f "com.hkmanjuu.azurlane.gp.apk" ]; then
     echo "Get Azur Lane apk"
     download_azurlane
-    unzip -o com.YoStarEN.AzurLane.xapk -d AzurLane
-    cp AzurLane/com.YoStarEN.AzurLane.apk .
+    unzip -o com.hkmanjuu.azurlane.gp.xapk -d AzurLane
+    cp AzurLane/com.hkmanjuu.azurlane.gp.apk .
 fi
 
 # Download Perseus
@@ -45,19 +45,19 @@ if [ ! -d "Perseus" ]; then
 fi
 
 echo "Decompile Azur Lane apk"
-java -jar apktool.jar -q -f d com.YoStarEN.AzurLane.apk
+java -jar apktool.jar -q -f d com.hkmanjuu.azurlane.gp.apk
 
 echo "Copy Perseus libs"
-cp -r Perseus/. com.YoStarEN.AzurLane/lib/
+cp -r Perseus/. com.hkmanjuu.azurlane.gp/lib/
 
 echo "Patching Azur Lane with Perseus"
-oncreate=$(grep -n -m 1 'onCreate' com.YoStarEN.AzurLane/smali_classes2/com/unity3d/player/UnityPlayerActivity.smali | sed  's/[0-9]*\:\(.*\)/\1/')
-sed -ir "s#\($oncreate\)#.method private static native init(Landroid/content/Context;)V\n.end method\n\n\1#" com.YoStarEN.AzurLane/smali_classes2/com/unity3d/player/UnityPlayerActivity.smali
+oncreate=$(grep -n -m 1 'onCreate' com.hkmanjuu.azurlane.gp/smali_classes2/com/unity3d/player/UnityPlayerActivity.smali | sed  's/[0-9]*\:\(.*\)/\1/')
+sed -ir "s#\($oncreate\)#.method private static native init(Landroid/content/Context;)V\n.end method\n\n\1#" com.hkmanjuu.azurlane.gp/smali_classes2/com/unity3d/player/UnityPlayerActivity.smali
 sed -ir "s#\($oncreate\)#\1\n    const-string v0, \"Perseus\"\n\n\    invoke-static {v0}, Ljava/lang/System;->loadLibrary(Ljava/lang/String;)V\n\n    invoke-static {p0}, Lcom/unity3d/player/UnityPlayerActivity;->init(Landroid/content/Context;)V\n#" com.YoStarEN.AzurLane/smali_classes2/com/unity3d/player/UnityPlayerActivity.smali
 
 echo "Build Patched Azur Lane apk"
-java -jar apktool.jar -q -f b com.YoStarEN.AzurLane -o build/com.YoStarEN.AzurLane.patched.apk
+java -jar apktool.jar -q -f b com.hkmanjuu.azurlane.gp -o build/com.hkmanjuu.azurlane.gp.patched.apk
 
 echo "Set Github Release version"
-s=($(./apkeep -a com.YoStarEN.AzurLane -l))
+s=($(./apkeep -a com.hkmanjuu.azurlane.gp -l))
 echo "PERSEUS_VERSION=$(echo ${s[-1]})" >> $GITHUB_ENV
