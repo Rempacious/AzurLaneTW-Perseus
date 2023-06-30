@@ -26,12 +26,12 @@ chmod +x apkeep
 
 # Download Azur Lane
 download_azurlane () {
-    if [ ! -f "com.hkmanjuu.azurlane.gp.xapk" ]; then
+    if [ ! -f "com.hkmanjuu.azurlane.gp" ]; then
     ./apkeep -a com.hkmanjuu.azurlane.gp .
     fi
 }
 
-if [ ! -f "com.hkmanjuu.azurlane.gp.apk" ]; then
+if [ ! -f "com.hkmanjuu.azurlane.gp" ]; then
     echo "Get Azur Lane apk"
     download_azurlane
     unzip -o com.hkmanjuu.azurlane.gp.xapk -d AzurLane
